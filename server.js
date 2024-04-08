@@ -1,5 +1,5 @@
 'use strict';
-
+import helmet from 'helmet';
 const express     = require('express');
 const bodyParser  = require('body-parser');
 const cors        = require('cors');
@@ -12,6 +12,20 @@ const fccTestingRoutes  = require('./routes/fcctesting.js');
 const runner            = require('./test-runner');
 
 const app = express();
+
+app.use(helmet({
+  frameguard: {
+    action: 'deny'
+  },
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      styleSrc: ["'self'", 'aaronwallo.ch'], // Corrected syntax here
+    }
+  },
+  dnsPrefetchControl: false
+}))
+
 
 app.use('/public', express.static(process.cwd() + '/public'));
 
